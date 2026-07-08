@@ -635,12 +635,13 @@ async function loadModel(id) {
   overlay.classList.remove("hidden");
 
   try {
+    const chatOpts = id.toLowerCase().includes("gemma") ? { sliding_window_size: -1 } : undefined;
     state.engine = await webllm.CreateMLCEngine(id, {
       initProgressCallback: r => {
         const p = Math.round(r.progress * 100);
         barFill.style.width = p + "%"; loadPct.textContent = p + "%"; loadDetail.textContent = r.text || "Loading…";
-      },
-    });
+      }
+    }, chatOpts);
     state.model = id;
     state.messages = [{ role: "system", content: SYS }];
     loadPct.textContent = "✓"; loadDetail.textContent = "Ready!";
