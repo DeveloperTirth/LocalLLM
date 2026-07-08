@@ -726,7 +726,14 @@ function scroll() { const m = $("#messages"); if (m) m.scrollTop = m.scrollHeigh
 
 function showError(t, h) {
   const d = document.createElement("div"); d.className = "error-overlay";
-  d.innerHTML = `<div class="error-box"><h3>${t}</h3><p>${h}</p></div>`;
+  d.innerHTML = `<div class="error-box">
+    <h3>${t}</h3>
+    <p style="margin-bottom: 16px">${h}</p>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button onclick="location.reload()" style="padding:8px 16px;background:var(--green);color:#fff;border-radius:6px;font-size:.8rem;font-weight:600;">Reload Page</button>
+      <button onclick="this.closest('.error-overlay').remove()" style="padding:8px 16px;background:var(--bg-side);color:var(--text);border-radius:6px;font-size:.8rem;font-weight:600;">Dismiss</button>
+    </div>
+  </div>`;
   document.body.appendChild(d);
 }
 
