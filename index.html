@@ -362,7 +362,7 @@
   <!-- ── Welcome panel ── -->
   <div class="panel welcome active" id="panel-welcome">
     <p class="welcome-sub">Welcome to LocalLLM</p>
-    <h1>Ask me anything—I'm here to help!</h1>
+    <h1>Ask me anything — I'm here to help!</h1>
 
     <div class="main-input-box" id="main-input-box">
       <textarea id="welcome-textarea" placeholder="Whatever you need, just ask LocalLLM!"></textarea>
@@ -474,7 +474,7 @@ marked.setOptions({ breaks: true, gfm: true });
 
 // ── State ──
 const state = { engine: null, messages: [], generating: false, model: null, models: [], filter: "All" };
-const SYS = "You are a helpful AI assistant running locally on the user's device. No data leaves this browser. Be concise and helpful.";
+const SYS = "You are a helpful AI assistant running locally on the user's device. Be concise and helpful.";
 
 // ── DOM ──
 const $ = s => document.querySelector(s);
@@ -654,7 +654,16 @@ async function loadModel(id) {
     renderModels(); go("chat"); userInput.focus();
   } catch (e) {
     overlay.classList.add("hidden");
-    showError("Load Failed", `${e.message}<br><br>Try a smaller model.`);
+    let m = e.message;
+    let extra = "Try a smaller model.";
+    if (m.includes("Cache.add") || m.toLowerCase().includes("quota") || m.includes("network error")) {
+      extra = `Your browser's model storage is full!<br><br>
+        <button onclick="caches.keys().then(k => Promise.all(k.map(c => caches.delete(c)))).then(() => { alert('Storage Cleared! Reloading...'); location.reload(); })" 
+        style="padding:10px 18px;background:var(--red);color:#fff;border-radius:8px;font-size:0.9rem;font-weight:600;margin-top:8px;border:none;cursor:pointer;">
+        Clear Downloaded Models & Refresh
+        </button>`;
+    }
+    showError("Load Failed", `${m}<br><br>${extra}`);
   }
 }
 
