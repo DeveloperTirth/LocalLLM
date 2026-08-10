@@ -657,9 +657,13 @@ async function loadModel(id) {
     let m = e.message;
     let extra = "Try a smaller model.";
     if (m.includes("Cache.add") || m.toLowerCase().includes("quota") || m.includes("network error")) {
-      extra = `Your browser's model storage is full!<br><br>
+      extra = `This means either your browser storage is full, OR an adblocker/VPN is blocking the download.<br><br>
+        <b>Troubleshooting:</b><br>
+        1. Turn off Adblockers (uBlock, Brave Shields) for this site.<br>
+        2. Disable strict VPNs/firewalls.<br>
+        3. Clear your storage below and try again:<br>
         <button onclick="caches.keys().then(k => Promise.all(k.map(c => caches.delete(c)))).then(() => { alert('Storage Cleared! Reloading...'); location.reload(); })" 
-        style="padding:10px 18px;background:var(--red);color:#fff;border-radius:8px;font-size:0.9rem;font-weight:600;margin-top:8px;border:none;cursor:pointer;">
+        style="padding:10px 18px;background:var(--red);color:#fff;border-radius:8px;font-size:0.9rem;font-weight:600;margin-top:12px;border:none;cursor:pointer;">
         Clear Downloaded Models & Refresh
         </button>`;
     }
